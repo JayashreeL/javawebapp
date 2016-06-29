@@ -27,7 +27,7 @@ public class Users {
             
             StringBuilder SQL = new StringBuilder();
             SQL.append("SELECT ").append(System.lineSeparator());
-            SQL.append("    *  ").append(System.lineSeparator());
+            SQL.append("    * ").append(System.lineSeparator());
             SQL.append("FROM ").append(System.lineSeparator());
             SQL.append("    ").append(TABLE_NAME).append(System.lineSeparator());
             
@@ -50,39 +50,44 @@ public class Users {
     }
     
     /**
-     * 1件追加
-     * @param data
-     * @return 更新件数
+     * Usersテーブルから全データを取得
+     * @return 
      */
-    public static int insertOne(User data) {
-        int result = 0;
+    public static User selectByID(int id) {
+        
+        User result = null;
         
         try ( Connection connection = Database.getConnection(); ) {
             
             StringBuilder SQL = new StringBuilder();
-            SQL.append("INSERT INTO ").append(System.lineSeparator());
+            
+            SQL.append("SELECT ").append(System.lineSeparator());
+            SQL.append("    * ").append(System.lineSeparator());
+            SQL.append("FROM ").append(System.lineSeparator());
             SQL.append("    ").append(TABLE_NAME).append(System.lineSeparator());
-            SQL.append("( ").append(System.lineSeparator());
-            SQL.append("    `name` ").append(System.lineSeparator());
-            SQL.append(",   `email` ").append(System.lineSeparator());
-            SQL.append(") VALUES ( ").append(System.lineSeparator());
-            SQL.append("    ? ").append(System.lineSeparator());
-            SQL.append(",   ? ").append(System.lineSeparator());
-            SQL.append(") ").append(System.lineSeparator());
+            SQL.append("WHERE ").append(System.lineSeparator());
+            SQL.append("    `id` = ? ").append(System.lineSeparator());
             
             PreparedStatement stm = connection.prepareStatement(SQL.toString());
             
-            stm.setString(1, data.getName());
-            stm.setString(2, data.getEmail());
+            stm.setInt(1, id);
             
-            result = stm.executeUpdate();
+            ResultSet rs = stm.executeQuery();
+            
+            while(rs.next()) {
+                
+                result = new User(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("email")
+                );
+                
+            }
             
         } catch (SQLException e) {
             e.printStackTrace();
         }
         
         return result;
-        
     }
-    
 }

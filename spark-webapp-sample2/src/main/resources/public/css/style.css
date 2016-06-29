@@ -24,9 +24,13 @@ footer {
 }
 .main {
   height: calc(100vh - 120px - 60px);
+  display: -webkit-flex; /* Safari */
   display: flex;
+  -webkit-flex-direction: column;
   flex-direction: column;
+  -webkit-align-items: center;
   align-items: center;
+  -webkit-justify-content: center;
   justify-content: center;
 }
 .page-title {

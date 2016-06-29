@@ -1,6 +1,7 @@
 package me.nagatani.dev.spark.webapp.sample2;
 
 import com.google.gson.Gson;
+import me.nagatani.dev.spark.webapp.sample2.models.User;
 import me.nagatani.dev.spark.webapp.sample2.models.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,20 +27,23 @@ public class App {
         // http://localhost:4567/users
         get("/users", (req, res) -> {
             
-            /*
-            // Userのリストを作成して返す
-            List<User> users = new ArrayList<>();
-            users.add(new User(1, "name1", "name1@sample.com"));
-            users.add(new User(1, "name2", "name2@sample.com"));
-            users.add(new User(1, "name3", "name3@sample.com"));
-            */
-            
-            
             // データベースから全件取得して返す
             return Users.selectAll();
             
         }, gson::toJson);
         // ↑Gson.toJsonメソッドをポインタで渡す
+        
+        // http://localhost:4567/users/?
+        get("/users/:id", (req, res) -> {
+            
+            int id = Integer.parseInt(req.params(":id"));
+            User u = Users.selectByID(id);
+            if (u == null) {
+                halt(404, "Not Found!!!");
+                return null;
+            }
+            return u;
+        }, gson::toJson);
         
         // NetBeans上で実行する際にサーバーの停止に必要
         // http://localhost:4567/stop

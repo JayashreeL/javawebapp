@@ -2,7 +2,7 @@ var getUsersData = function() {
   var xhr = new XMLHttpRequest();
 
   //JSONデータ用のURLを指定
-  var url = '/users';
+  var url = '/users/1';
 
   //コネクションを開く
   xhr.open('GET', url, true);
@@ -33,8 +33,11 @@ var getUsersData = function() {
           out += '</tr>';
         }
       } else {
-        out += '<tr><td>' + data.name + '</td>';
-        out += '<td>' + data.email + '</td></tr>';
+          out += '<tr>';
+          out += '<td>' + data.id + '</td>';
+          out += '<td>' + data.name + '</td>';
+          out += '<td>' + data.email + '</td>';
+          out += '</tr>';
       }
       out += '</table>';
 
